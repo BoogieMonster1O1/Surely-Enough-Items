@@ -103,11 +103,12 @@ public abstract class InventoryScreenMixin extends ContainerScreen {
     @Inject(method="buttonPressed",at=@At("TAIL"))
     protected void buttonPressed(ButtonWidget button,CallbackInfo ci) {
         if (button.id == -1 && pageNum < getPageCount()) {
-            setPageNum(pageNum + 1);
+            this.setPageNum(pageNum + 1);
         } else if (button.id == -2 && pageNum > 1) {
-            setPageNum(pageNum - 1);
+            this.setPageNum(pageNum - 1);
         }
-        updateButtonEnabled();
+        this.updateButtonEnabled();
+        this.updatePage();
     }
 
     @Override

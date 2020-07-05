@@ -1,5 +1,7 @@
 package io.github.boogiemonster1o1.sei.gui;
 
+import io.github.boogiemonster1o1.sei.util.SEICommandHelper;
+import io.github.boogiemonster1o1.sei.util.SEIPermissions;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.font.TextRenderer;
 import net.minecraft.client.network.ClientPlayerEntity;
@@ -25,14 +27,13 @@ public class ItemIcon {
 
     public void mouseClicked(int xPos, int yPos, int mouseButton) {
         ClientPlayerEntity player = MinecraftClient.getInstance().player;
-//        if (Permissions.canPlayerSpawnItems(player)) {
-//            if (mouseButton == 0)
-//                Commands.giveFullStack(itemStack);
-//            else if (mouseButton == 1)
-//                Commands.giveOneFromStack(itemStack);
-//        }
+        if (SEIPermissions.canPlayerSpawnItems(player)) {
+            if (mouseButton == 0)
+                SEICommandHelper.giveFullStack(itemStack);
+            else if (mouseButton == 1)
+                SEICommandHelper.giveOneFromStack(itemStack);
+        }
         //TODO: recipes
-        player.sendChatMessage("Clicked " + itemStack.getName());
     }
 
     public void draw(ItemRenderer itemRender, TextRenderer textRenderer) {
