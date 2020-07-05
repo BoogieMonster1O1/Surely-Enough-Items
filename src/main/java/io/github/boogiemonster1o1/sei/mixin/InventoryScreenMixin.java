@@ -4,8 +4,8 @@ import io.github.boogiemonster1o1.sei.SurelyEnoughItems;
 import io.github.boogiemonster1o1.sei.gui.ItemIcon;
 import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
+import net.minecraft.client.gui.screen.ingame.AbstractInventoryScreen;
 import net.minecraft.client.gui.screen.ingame.ContainerScreen;
-import net.minecraft.client.gui.screen.ingame.InventoryScreen;
 import net.minecraft.client.gui.widget.ButtonWidget;
 import net.minecraft.client.render.GuiLighting;
 import net.minecraft.container.Container;
@@ -20,7 +20,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 @Environment(EnvType.CLIENT)
-@Mixin(InventoryScreen.class)
+@Mixin(AbstractInventoryScreen.class)
 public abstract class InventoryScreenMixin extends ContainerScreen {
 
     private static final int iconPadding = 2;
@@ -53,8 +53,8 @@ public abstract class InventoryScreenMixin extends ContainerScreen {
     public void initGui(CallbackInfo ci) {
         final int buttonWidth = 50;
         final int buttonHeight = 20;
-        buttons.add(nextButton = new ButtonWidget(-1, this.width - buttonWidth - 4, 0, buttonWidth, buttonHeight, "Next"));
-        buttons.add(backButton = new ButtonWidget(-2, this.x + this.containerWidth + 4, 0, buttonWidth, buttonHeight, "Back"));
+        buttons.add(nextButton = new ButtonWidget(-1, this.width - buttonWidth - 4, 0, buttonWidth, buttonHeight, ">"));
+        buttons.add(backButton = new ButtonWidget(-2, this.x + this.containerWidth + 4, 0, buttonWidth, buttonHeight, "<"));
 
         int pageCount = getPageCount();
         if (pageNum > pageCount) {
@@ -100,8 +100,9 @@ public abstract class InventoryScreenMixin extends ContainerScreen {
         backButton.active = pageNum > 1;
     }
 
-    @Inject(method="buttonPressed",at=@At("TAIL"))
-    protected void buttonPressed(ButtonWidget button,CallbackInfo ci) {
+    //@Inject(method="buttonPressed",at=@At("TAIL"))
+    @Override
+    protected void buttonPressed(ButtonWidget button) {
         if (button.id == -1 && pageNum < getPageCount()) {
             this.setPageNum(pageNum + 1);
         } else if (button.id == -2 && pageNum > 1) {
