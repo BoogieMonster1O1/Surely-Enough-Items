@@ -12,12 +12,11 @@ import net.minecraft.client.render.GuiLighting;
 import net.minecraft.container.Container;
 import net.minecraft.item.ItemStack;
 import org.spongepowered.asm.mixin.Mixin;
-import org.spongepowered.asm.mixin.Shadow;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
-import java.awt.Color;
+import java.awt.*;
 
 @Environment(EnvType.CLIENT)
 @Mixin(InventoryScreen.class)
@@ -26,8 +25,8 @@ public abstract class InventoryScreenMixin extends ContainerScreen {
     public ButtonWidget next;
     public ButtonWidget previous;
     public int pageNum = 1;
-    static int iconPadding = 2;
-    static int iconSize = 16;
+    private static final int iconPadding = 2;
+    private static final int iconSize = 16;
 
     public InventoryScreenMixin(Container container) {
         super(container);
