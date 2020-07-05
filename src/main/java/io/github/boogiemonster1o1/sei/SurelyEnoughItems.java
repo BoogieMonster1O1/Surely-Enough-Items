@@ -7,6 +7,7 @@ import org.apache.logging.log4j.Logger;
 public class SurelyEnoughItems implements ModInitializer {
 
     static final Logger LOGGER = LogManager.getLogger(SurelyEnoughItems.class);
+    public static ItemStacks ITEM_STACKS;
 
     @Override
     public void onInitialize() {

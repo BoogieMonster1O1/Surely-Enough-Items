@@ -4,8 +4,10 @@
   "package": "io.github.boogiemonster1o1.sei.mixin",
   "compatibilityLevel": "JAVA_8",
   "mixins": [
+    "BootstrapMixin"
   ],
   "client": [
+    "InventoryScreenMixin"
   ],
   "injectors": {
     "defaultRequire": 1
