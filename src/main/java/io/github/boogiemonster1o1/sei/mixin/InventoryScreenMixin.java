@@ -1,10 +1,9 @@
 package io.github.boogiemonster1o1.sei.mixin;
 
 import io.github.boogiemonster1o1.sei.SurelyEnoughItems;
+import io.github.boogiemonster1o1.sei.gui.ItemIcon;
 import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
-import net.minecraft.client.MinecraftClient;
-import net.minecraft.client.font.TextRenderer;
 import net.minecraft.client.gui.screen.ingame.ContainerScreen;
 import net.minecraft.client.gui.screen.ingame.InventoryScreen;
 import net.minecraft.client.gui.widget.ButtonWidget;
@@ -17,75 +16,124 @@ import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
 import java.awt.*;
+import java.util.ArrayList;
+import java.util.List;
 
 @Environment(EnvType.CLIENT)
 @Mixin(InventoryScreen.class)
 public abstract class InventoryScreenMixin extends ContainerScreen {
 
-    public ButtonWidget next;
-    public ButtonWidget previous;
-    public int pageNum = 1;
     private static final int iconPadding = 2;
     private static final int iconSize = 16;
+
+    protected List<ItemIcon> items = new ArrayList<>();
+
+    protected ButtonWidget nextButton;
+    protected ButtonWidget backButton;
+    protected int pageNum = 1;
 
     public InventoryScreenMixin(Container container) {
         super(container);
     }
 
-    @Inject(method="init",at=@At(value="TAIL"))
-    private void initButtons(CallbackInfo ci){
-        int buttonWidth = 50;
-        int buttonHeight = 20;
-        this.buttons.add(next = new ButtonWidget(-1, this.width - buttonWidth - 4, 0, buttonWidth, buttonHeight, "Next"));
-        this.buttons.add(previous = new ButtonWidget(-2, this.x + this.containerWidth + 4, 0, buttonWidth, buttonHeight, "Back"));
-
-        int pageCount = this.getPageCount();
-        if (this.pageNum > pageCount) {
-            this.pageNum = pageCount;
-        }
-
-        this.updateButtons();
-    }
-
-    @Inject(method = "drawForeground",at=@At(value="HEAD"))
-    private void renderItemListForeground(int mouseX,int mouseY,CallbackInfo ci){
+    @Inject(method="render",at=@At("TAIL"))
+    public void renderAll(int mouseX, int mouseY, float delta,CallbackInfo ci) {
         GuiLighting.method_2214();
 
-        final int xStart = this.containerWidth + 4;
-        final int yStart = -this.y + 20 + 4;
-
-        int x = xStart;
-        int y = yStart;
-
-        int maxX = 0;
-
-        for (int i = (pageNum - 1) * this.getCountPerPage(); i < SurelyEnoughItems.ITEM_STACKS.itemList.size(); i++) {
-            ItemStack stack = SurelyEnoughItems.ITEM_STACKS.itemList.get(i);
-            this.drawItemStack(stack, x, y);
-
-            x += iconSize + iconPadding;
-
-            if (x + iconSize + this.x > this.width) {
-                x = xStart;
-                y += iconSize + iconPadding;
-            }
-
-            if (y + iconSize + this.y > this.height) {
-                break;
-            }
+        for (ItemIcon itemIcon : items) {
+            itemIcon.draw(this.itemRenderer, this.textRenderer);
         }
 
         GuiLighting.method_2210();
 
-        this.next.x = this.x + maxX + iconSize - this.next.getWidth();
+        drawPageNumbers();
+    }
 
-        this.drawPagination();
-        this.updateButtons();
+    @Inject(method="init",at=@At("RETURN"))
+    public void initGui(CallbackInfo ci) {
+        final int buttonWidth = 50;
+        final int buttonHeight = 20;
+        buttons.add(nextButton = new ButtonWidget(-1, this.width - buttonWidth - 4, 0, buttonWidth, buttonHeight, "Next"));
+        buttons.add(backButton = new ButtonWidget(-2, this.x + this.containerWidth + 4, 0, buttonWidth, buttonHeight, "Back"));
+
+        int pageCount = getPageCount();
+        if (pageNum > pageCount) {
+            setPageNum(pageCount);
+        }
+
+        updatePage();
+        updateButtonEnabled();
+    }
+
+    private void updatePage() {
+        items.clear();
+
+        final int xStart = this.x + this.containerWidth + 4;
+        final int yStart = 20 + 4;
+
+        int x = xStart;
+        int y = yStart;
+        int maxX = 0;
+
+        for (int i = (pageNum - 1) * getCountPerPage(); i < SurelyEnoughItems.ITEM_STACKS.itemList.size(); i++) {
+            ItemStack stack = SurelyEnoughItems.ITEM_STACKS.itemList.get(i);
+            items.add(new ItemIcon(stack, x, y));
+
+            x += iconSize + iconPadding;
+            if (x + iconSize > width) {
+                x = xStart;
+                y += iconSize + iconPadding;
+            }
+
+            if (y + iconSize > height)
+                break;
+
+            if (x > maxX)
+                maxX = x;
+        }
+
+        this.nextButton.x = maxX + iconSize - this.nextButton.getWidth();
+    }
+
+    private void updateButtonEnabled() {
+        nextButton.active = pageNum < getPageCount();
+        backButton.active = pageNum > 1;
+    }
+
+    @Inject(method="buttonPressed",at=@At("TAIL"))
+    protected void buttonPressed(ButtonWidget button,CallbackInfo ci) {
+        if (button.id == -1 && pageNum < getPageCount()) {
+            setPageNum(pageNum + 1);
+        } else if (button.id == -2 && pageNum > 1) {
+            setPageNum(pageNum - 1);
+        }
+        updateButtonEnabled();
+    }
+
+    @Override
+    protected void mouseClicked(int xPos, int yPos, int mouseButton) {
+        for (ItemIcon itemIcon : items) {
+            if (itemIcon.isMouseOver(xPos, yPos)) {
+                itemIcon.mouseClicked(xPos, yPos, mouseButton);
+                return;
+            }
+        }
+        super.mouseClicked(xPos, yPos, mouseButton);
+    }
+
+    private void drawPageNumbers() {
+        String pageDisplay = getPageNum() + " / " + getPageCount();
+        int pageDisplayWidth = this.textRenderer.getStringWidth(pageDisplay);
+
+        int pageDisplayX = ((this.backButton.x + this.backButton.getWidth()) + this.nextButton.x) / 2;
+        int pageDisplayY = this.backButton.y + 6;
+
+        this.textRenderer.draw(pageDisplay, pageDisplayX - (pageDisplayWidth / 2), pageDisplayY, Color.white.getRGB());
     }
 
     private int getCountPerPage() {
-        int xArea = this.width - (this.x + this.containerWidth + 4);
-        int yArea = this.height - (20 + 4);
+        int xArea = width - (this.x + this.containerWidth + 4);
+        int yArea = height - (20 + 4);
 
         int xCount = xArea / (iconSize + iconPadding);
         int yCount = yArea / (iconSize + iconPadding);
@@ -93,47 +141,19 @@ public abstract class InventoryScreenMixin extends ContainerScreen {
         return xCount * yCount;
     }
 
-    @Override
-    protected void buttonPressed(ButtonWidget button) {
-        if (button.id == -1 && pageNum < getPageCount()) {
-            pageNum++;
-        } else if (button.id == -2 && pageNum > 1) {
-            pageNum--;
-        }
-        this.updateButtons();
-    }
-
     private int getPageCount() {
         int count = SurelyEnoughItems.ITEM_STACKS.itemList.size();
-        return (int) Math.ceil((double) count / (double) this.getCountPerPage());
-    }
-
-    private void updateButtons() {
-        this.next.active = this.pageNum < this.getPageCount();
-        this.previous.active = this.pageNum > 1;
+        return (int) Math.ceil((double) count / (double) getCountPerPage());
     }
 
     protected int getPageNum() {
-        return this.pageNum;
+        return pageNum;
     }
 
-    private void drawPagination() {
-        String pageDisplay = getPageNum() + " / " + getPageCount();
-        int pageDisplayWidth = this.textRenderer.getStringWidth(pageDisplay);
-
-        int pageDisplayX = ((this.previous.x + this.previous.getWidth()) + this.previous.x) / 2;
-        int pageDisplayY = this.previous.y + 6;
-
-        this.textRenderer.draw(pageDisplay, pageDisplayX - (pageDisplayWidth / 2) - this.x, pageDisplayY - this.y, Color.white.getRGB());
-    }
-
-
-    private void drawItemStack(ItemStack itemStack, int xPos, int yPos) {
-        TextRenderer text = MinecraftClient.getInstance().textRenderer;
-        if (text == null) {
-            text = this.textRenderer;
-        }
-        this.itemRenderer.renderInGuiWithOverrides( itemStack, xPos, yPos);
-        this.itemRenderer.renderGuiItemOverlay(text, itemStack, xPos, yPos,null);
+    protected void setPageNum(int pageNum) {
+        if (this.pageNum == pageNum)
+            return;
+        this.pageNum = pageNum;
+        updatePage();
     }
 }
