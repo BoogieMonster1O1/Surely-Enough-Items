@@ -28,10 +28,9 @@ public class ItemIcon {
     public void mouseClicked(int xPos, int yPos, int mouseButton) {
         ClientPlayerEntity player = MinecraftClient.getInstance().player;
         if (SEIPermissions.canPlayerSpawnItems(player)) {
-            if (mouseButton == 0)
+            if (mouseButton == 0) {
                 SEICommandHelper.giveFullStack(itemStack);
-            else if (mouseButton == 1)
-                SEICommandHelper.giveOneFromStack(itemStack);
+            }
         }
         //TODO: recipes
     }

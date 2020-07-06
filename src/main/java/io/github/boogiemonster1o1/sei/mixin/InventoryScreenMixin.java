@@ -2,6 +2,7 @@ package io.github.boogiemonster1o1.sei.mixin;
 
 import io.github.boogiemonster1o1.sei.SurelyEnoughItems;
 import io.github.boogiemonster1o1.sei.gui.ItemIcon;
+import io.github.boogiemonster1o1.sei.util.SEIInventory;
 import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
 import net.minecraft.client.gui.screen.ingame.AbstractInventoryScreen;
@@ -10,6 +11,7 @@ import net.minecraft.client.gui.widget.ButtonWidget;
 import net.minecraft.client.render.GuiLighting;
 import net.minecraft.container.Container;
 import net.minecraft.item.ItemStack;
+import org.lwjgl.input.Keyboard;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
@@ -21,7 +23,7 @@ import java.util.List;
 
 @Environment(EnvType.CLIENT)
 @Mixin(AbstractInventoryScreen.class)
-public abstract class InventoryScreenMixin extends ContainerScreen {
+public abstract class InventoryScreenMixin extends ContainerScreen implements SEIInventory {
 
     private static final int iconPadding = 2;
     private static final int iconSize = 16;
@@ -30,7 +32,8 @@ public abstract class InventoryScreenMixin extends ContainerScreen {
 
     protected ButtonWidget nextButton;
     protected ButtonWidget backButton;
-    protected int pageNum = 1;
+
+    private int pageNum = 1;
 
     public InventoryScreenMixin(Container container) {
         super(container);
@@ -65,7 +68,7 @@ public abstract class InventoryScreenMixin extends ContainerScreen {
         updateButtonEnabled();
     }
 
-    private void updatePage() {
+    public void updatePage() {
         items.clear();
 
         final int xStart = this.x + this.containerWidth + 4;
@@ -95,12 +98,11 @@ public abstract class InventoryScreenMixin extends ContainerScreen {
         this.nextButton.x = maxX + iconSize - this.nextButton.getWidth();
     }
 
-    private void updateButtonEnabled() {
+    public void updateButtonEnabled() {
         nextButton.active = pageNum < getPageCount();
         backButton.active = pageNum > 1;
     }
 
-    //@Inject(method="buttonPressed",at=@At("TAIL"))
     @Override
     protected void buttonPressed(ButtonWidget button) {
         if (button.id == -1 && pageNum < getPageCount()) {
@@ -110,6 +112,13 @@ public abstract class InventoryScreenMixin extends ContainerScreen {
         }
         this.updateButtonEnabled();
         this.updatePage();
+    }
+
+    @Override
+    protected void keyPressed(char character, int code) {
+        if(code == Keyboard.KEY_RIGHT){
+
+        }
     }
 
     @Override
@@ -148,11 +157,11 @@ public abstract class InventoryScreenMixin extends ContainerScreen {
         return (int) Math.ceil((double) count / (double) getCountPerPage());
     }
 
-    protected int getPageNum() {
+    public int getPageNum() {
         return pageNum;
     }
 
-    protected void setPageNum(int pageNum) {
+    public void setPageNum(int pageNum) {
         if (this.pageNum == pageNum)
             return;
         this.pageNum = pageNum;
