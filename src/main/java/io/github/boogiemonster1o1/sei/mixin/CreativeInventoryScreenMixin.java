@@ -3,6 +3,7 @@ package io.github.boogiemonster1o1.sei.mixin;
 import io.github.boogiemonster1o1.sei.util.SEIInventory;
 import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
+import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.gui.screen.ingame.CreativeInventoryScreen;
 import org.lwjgl.input.Keyboard;
 import org.spongepowered.asm.mixin.Mixin;
@@ -27,6 +28,10 @@ public class CreativeInventoryScreenMixin implements SEIInventory {
                 this.setPageNum(this.getPageNum() + 1);
                 this.updateButtonEnabled();
             }
+        }
+
+        if(code == Keyboard.KEY_ESCAPE){
+            MinecraftClient.getInstance().closeScreen();
         }
     }
 }
