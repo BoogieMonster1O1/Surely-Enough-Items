@@ -7,8 +7,11 @@
   ],
   "client": [
     "BootstrapMixin",
+    "BrewingStandScreenMixin",
     "CraftingTableScreenMixin",
     "CreativeInventoryScreenMixin",
+    "EnchantingScreenMixin",
+    "FurnaceScreenMixin",
     "GenericContainerScreenMixin",
     "InventoryScreenMixin"
   ],

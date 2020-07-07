@@ -36,7 +36,7 @@ public class ContainerOverlay {
     }
 
     public void init(List<ButtonWidget> buttonList) {
-        final int buttonWidth = 50;
+        final int buttonWidth = 20;
         final int buttonHeight = 20;
         String next = ">";
         String back = "<";
