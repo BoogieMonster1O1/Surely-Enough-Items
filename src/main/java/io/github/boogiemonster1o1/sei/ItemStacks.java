@@ -15,11 +15,11 @@ public class ItemStacks {
 
     public ItemStacks() {
         for (Block block : Block.REGISTRY) {
-            this.addStack(new ItemStack(block));
+            this.addBlockAndSubBlocks(block);
         }
 
         for (Item item : Item.REGISTRY) {
-            this.addStack(new ItemStack(item));
+            this.addItemAndSubItems(item);
         }
     }
 
@@ -61,38 +61,11 @@ public class ItemStacks {
         }
     }
 
-    public void addStack(ItemStack itemStack) {
-        if (itemStack == null) {
-            return;
-        }
-
-        Item item = itemStack.getItem();
-
-        if (item == null) {
-            return;
-        }
-
-        if (itemStack.method_8391()) {
-            List<ItemStack> subItems = new ArrayList<>();
-            item.addToItemGroup(item, null, subItems);
-            this.addItemStacks(subItems);
-        } else {
-            this.addItemStack(itemStack);
-        }
-    }
-
     public void addItemStacks(Iterable<ItemStack> stacks) {
-//        for (ItemStack stack : stacks) {
-//            this.addItemStack(stack);
-//        }
         stacks.forEach(this::addItemStack);
     }
 
     public void addItemStack(ItemStack stack) {
-//        if (itemNameSet.contains(stack.getTranslationKey()))
-//            return;
-//        itemNameSet.add(stack.getTranslationKey());
-//        itemList.add(stack);
         String itemKey = uniqueIdentifierForStack(stack);
         if (stack.hasTag())
             itemKey += stack.getTag();
