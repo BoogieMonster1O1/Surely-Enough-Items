@@ -1,6 +1,6 @@
 package io.github.boogiemonster1o1.sei.mixin;
 
-import io.github.boogiemonster1o1.sei.gui.ContainerOverlay;
+import io.github.boogiemonster1o1.sei.gui.ItemListOverlay;
 import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
 import net.minecraft.client.gui.screen.ingame.ContainerScreen;
@@ -15,7 +15,7 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 @Environment(EnvType.CLIENT)
 @Mixin(CreativeInventoryScreen.class)
 public abstract class CreativeInventoryScreenMixin extends ContainerScreen {
-    private ContainerOverlay overlay;
+    private ItemListOverlay overlay;
 
     public CreativeInventoryScreenMixin(Container container) {
         super(container);
@@ -23,7 +23,7 @@ public abstract class CreativeInventoryScreenMixin extends ContainerScreen {
 
     @Inject(method="init",at=@At("HEAD"))
     public void initGui(CallbackInfo ci) {
-        overlay = new ContainerOverlay(x, containerWidth, width, height);
+        overlay = new ItemListOverlay(x, containerWidth, width, height);
         overlay.init(buttons);
     }
 

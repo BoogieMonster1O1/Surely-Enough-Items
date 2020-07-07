@@ -1,6 +1,6 @@
 package io.github.boogiemonster1o1.sei.mixin;
 
-import io.github.boogiemonster1o1.sei.gui.ContainerOverlay;
+import io.github.boogiemonster1o1.sei.gui.ItemListOverlay;
 import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
 import net.minecraft.client.gui.screen.ingame.ContainerScreen;
@@ -16,7 +16,7 @@ import org.spongepowered.asm.mixin.Shadow;
 public abstract class GenericContainerScreenMixin extends ContainerScreen {
     @Shadow private Inventory field_3457; // upper
     @Shadow private Inventory field_3458; // lower
-    private ContainerOverlay overlay;
+    private ItemListOverlay overlay;
 
     public GenericContainerScreenMixin(Container container) {
         super(container);
@@ -33,7 +33,7 @@ public abstract class GenericContainerScreenMixin extends ContainerScreen {
     @Override
     public void init() {
         super.init();
-        overlay = new ContainerOverlay(this.x, this.containerHeight, width, height);
+        overlay = new ItemListOverlay(this.x, this.containerHeight, width, height);
         overlay.init(this.buttons);
     }
 

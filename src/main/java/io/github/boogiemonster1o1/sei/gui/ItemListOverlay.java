@@ -12,7 +12,7 @@ import java.awt.Color;
 import java.util.ArrayList;
 import java.util.List;
 
-public class ContainerOverlay {
+public class ItemListOverlay {
     static final int iconPadding = 2;
     static final int iconSize = 16;
     private static final ItemRenderer ITEM_RENDERER = MinecraftClient.getInstance().getItemRenderer();
@@ -28,7 +28,7 @@ public class ContainerOverlay {
     protected int width;
     protected int height;
 
-    public ContainerOverlay(int x, int containerSize, int width, int height) {
+    public ItemListOverlay(int x, int containerSize, int width, int height) {
         this.guiLeft = x;
         this.containerSize = containerSize;
         this.width = width;
@@ -141,9 +141,9 @@ public class ContainerOverlay {
     }
 
     protected void setPageNum(int pageNum) {
-        if (ContainerOverlay.pageNum == pageNum)
+        if (ItemListOverlay.pageNum == pageNum)
             return;
-        ContainerOverlay.pageNum = pageNum;
+        ItemListOverlay.pageNum = pageNum;
         updatePage();
 
     }

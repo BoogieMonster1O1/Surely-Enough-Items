@@ -1,6 +1,6 @@
 package io.github.boogiemonster1o1.sei.mixin;
 
-import io.github.boogiemonster1o1.sei.gui.ContainerOverlay;
+import io.github.boogiemonster1o1.sei.gui.ItemListOverlay;
 import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
 import net.minecraft.client.gui.screen.ingame.BrewingStandScreen;
@@ -13,7 +13,7 @@ import org.spongepowered.asm.mixin.Mixin;
 @Mixin(BrewingStandScreen.class)
 public abstract class BrewingStandScreenMixin extends ContainerScreen {
 
-    private ContainerOverlay overlay;
+    private ItemListOverlay overlay;
 
     public BrewingStandScreenMixin(Container container) {
         super(container);
@@ -22,7 +22,7 @@ public abstract class BrewingStandScreenMixin extends ContainerScreen {
     @Override
     public void init() {
         super.init();
-        overlay = new ContainerOverlay(this.x, this.containerHeight, width, height);
+        overlay = new ItemListOverlay(this.x, this.containerHeight, width, height);
         overlay.init(this.buttons);
     }
 
