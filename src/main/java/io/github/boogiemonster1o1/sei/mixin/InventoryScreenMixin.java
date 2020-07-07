@@ -7,6 +7,7 @@ import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
 import net.minecraft.client.gui.screen.ingame.AbstractInventoryScreen;
 import net.minecraft.client.gui.screen.ingame.ContainerScreen;
+import net.minecraft.client.gui.screen.ingame.InventoryScreen;
 import net.minecraft.client.gui.widget.ButtonWidget;
 import net.minecraft.client.render.GuiLighting;
 import net.minecraft.container.Container;
@@ -22,7 +23,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 @Environment(EnvType.CLIENT)
-@Mixin(AbstractInventoryScreen.class)
+@Mixin(InventoryScreen.class)
 public abstract class InventoryScreenMixin extends ContainerScreen implements SEIInventory {
 
     private static final int iconPadding = 2;

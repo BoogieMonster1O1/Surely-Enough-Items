@@ -14,24 +14,5 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 @Environment(EnvType.CLIENT)
 @Mixin(CreativeInventoryScreen.class)
 public class CreativeInventoryScreenMixin implements SEIInventory {
-    @Inject(method="keyPressed",at=@At("HEAD"))
-    private void keyPress(char character, int code,CallbackInfo ci){
-        if(code == Keyboard.KEY_LEFT){
-            if(this.getPageNum() >= 1){
-                this.setPageNum(this.getPageNum() - 1);
-                this.updateButtonEnabled();
-            }
-        }
 
-        if(code == Keyboard.KEY_RIGHT){
-            if(this.getPageNum() <= 4){
-                this.setPageNum(this.getPageNum() + 1);
-                this.updateButtonEnabled();
-            }
-        }
-
-        if(code == Keyboard.KEY_ESCAPE){
-            MinecraftClient.getInstance().closeScreen();
-        }
-    }
 }
