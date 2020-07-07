@@ -3,6 +3,7 @@ package io.github.boogiemonster1o1.sei.mixin;
 import io.github.boogiemonster1o1.sei.gui.ItemListOverlay;
 import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
+import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.gui.screen.ingame.ContainerScreen;
 import net.minecraft.client.gui.screen.ingame.InventoryScreen;
 import net.minecraft.client.gui.widget.ButtonWidget;
@@ -23,8 +24,8 @@ public abstract class InventoryScreenMixin extends ContainerScreen {
     }
 
     @Inject(method="init",at=@At("HEAD"))
-    public void initGui(CallbackInfo ci) {
-        overlay = new ItemListOverlay(x, containerWidth, width, height);
+    public void init(CallbackInfo ci) {
+        overlay = new ItemListOverlay(containerWidth, containerWidth, width, height);
         overlay.init(buttons);
     }
 
@@ -43,5 +44,11 @@ public abstract class InventoryScreenMixin extends ContainerScreen {
     protected void mouseClicked(int xPos, int yPos, int mouseButton) {
         super.mouseClicked(xPos, yPos, mouseButton);
         overlay.mouseClicked(xPos, yPos, mouseButton);
+    }
+
+    @Override
+    public void keyPressed(char character, int code){
+        super.keyPressed(character,code);
+        overlay.keyPressed(code);
     }
 }

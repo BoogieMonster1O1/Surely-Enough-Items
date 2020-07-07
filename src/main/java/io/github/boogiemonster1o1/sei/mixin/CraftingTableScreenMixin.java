@@ -42,4 +42,10 @@ public abstract class CraftingTableScreenMixin extends ContainerScreen {
         super.mouseClicked(mouseX, mouseY, button);
         overlay.mouseClicked(mouseX, mouseY, button);
     }
+
+    @Override
+    public void keyPressed(char character, int code){
+        super.keyPressed(character,code);
+        overlay.keyPressed(code);
+    }
 }

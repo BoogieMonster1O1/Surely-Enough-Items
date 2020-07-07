@@ -7,6 +7,7 @@ import net.minecraft.client.gui.widget.ButtonWidget;
 import net.minecraft.client.render.GuiLighting;
 import net.minecraft.client.render.item.ItemRenderer;
 import net.minecraft.item.ItemStack;
+import org.lwjgl.input.Keyboard;
 
 import java.awt.Color;
 import java.util.ArrayList;
@@ -23,13 +24,13 @@ public class ItemListOverlay {
     protected ButtonWidget backButton;
     protected static int pageNum = 1;
 
-    protected int guiLeft;
+    protected int x;
     protected int containerSize;
     protected int width;
     protected int height;
 
     public ItemListOverlay(int x, int containerSize, int width, int height) {
-        this.guiLeft = x;
+        this.x = x;
         this.containerSize = containerSize;
         this.width = width;
         this.height = height;
@@ -40,8 +41,8 @@ public class ItemListOverlay {
         final int buttonHeight = 20;
         String next = ">";
         String back = "<";
-        buttonList.add(nextButton = new ButtonWidget(-1, this.width - buttonWidth - 4, 0, buttonWidth, buttonHeight, next));
-        buttonList.add(backButton = new ButtonWidget(-2, this.guiLeft + this.containerSize + 4, 0, buttonWidth, buttonHeight, back));
+        buttonList.add(nextButton = new ButtonWidget(50, this.width - buttonWidth - 4, 0, buttonWidth, buttonHeight, next));
+        buttonList.add(backButton = new ButtonWidget(51, this.x + this.containerSize + 4, 0, buttonWidth, buttonHeight, back));
 
         int pageCount = getPageCount();
         if (pageNum > pageCount)
@@ -53,7 +54,7 @@ public class ItemListOverlay {
     private void updatePage() {
         items.clear();
 
-        final int xStart = guiLeft + containerSize + 4;
+        final int xStart = x + containerSize + 4;
         final int yStart = 20 + 4;
 
         int x = xStart;
@@ -78,12 +79,12 @@ public class ItemListOverlay {
     }
 
     public void buttonPressed(ButtonWidget button) {
-        if (button.id == -1) {
+        if (button.id == 50) {
             if (pageNum == getPageCount())
                 setPageNum(1);
             else
                 setPageNum(pageNum + 1);
-        } else if (button.id == -2) {
+        } else if (button.id == 51) {
             if (pageNum == 1)
                 setPageNum(getPageCount());
             else
@@ -122,7 +123,7 @@ public class ItemListOverlay {
     }
 
     private int getCountPerPage() {
-        int xArea = width - (guiLeft + containerSize + 4);
+        int xArea = width - (x + containerSize + 4);
         int yArea = height - (20 + 4);
 
         int xCount = xArea / (iconSize + iconPadding);
@@ -146,5 +147,16 @@ public class ItemListOverlay {
         ItemListOverlay.pageNum = pageNum;
         updatePage();
 
+    }
+
+    public void keyPressed(int keyCode){
+        try{
+            if (keyCode == Keyboard.KEY_LEFT) {
+                this.setPageNum(this.getPageNum() + 1);
+            } else if (keyCode == Keyboard.KEY_RIGHT) {
+                this.setPageNum(this.getPageNum() - 1);
+            }
+        } catch (Throwable ignore) {
+        }
     }
 }

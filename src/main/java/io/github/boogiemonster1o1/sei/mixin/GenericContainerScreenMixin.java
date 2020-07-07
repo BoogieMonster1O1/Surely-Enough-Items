@@ -10,6 +10,9 @@ import net.minecraft.container.Container;
 import net.minecraft.inventory.Inventory;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Shadow;
+import org.spongepowered.asm.mixin.injection.At;
+import org.spongepowered.asm.mixin.injection.Inject;
+import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
 @Environment(EnvType.CLIENT)
 @Mixin(GenericContainerScreen.class)
@@ -53,5 +56,11 @@ public abstract class GenericContainerScreenMixin extends ContainerScreen {
     protected void mouseClicked(int mouseX, int mouseY, int button) {
         super.mouseClicked(mouseX, mouseY, button);
         overlay.mouseClicked(mouseX, mouseY, button);
+    }
+
+    @Override
+    public void keyPressed(char character, int code){
+        super.keyPressed(character,code);
+        overlay.keyPressed(code);
     }
 }

@@ -7,6 +7,8 @@ import net.minecraft.client.gui.screen.ingame.ContainerScreen;
 import net.minecraft.client.gui.screen.ingame.CreativeInventoryScreen;
 import net.minecraft.client.gui.widget.ButtonWidget;
 import net.minecraft.container.Container;
+import net.minecraft.util.math.MathHelper;
+import org.lwjgl.input.Keyboard;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
@@ -22,8 +24,8 @@ public abstract class CreativeInventoryScreenMixin extends ContainerScreen {
     }
 
     @Inject(method="init",at=@At("HEAD"))
-    public void initGui(CallbackInfo ci) {
-        overlay = new ItemListOverlay(x, containerWidth, width, height);
+    public void init(CallbackInfo ci) {
+        overlay = new ItemListOverlay(x, MathHelper.floor(containerWidth * 1.7f), width, height);
         overlay.init(buttons);
     }
 
@@ -42,5 +44,10 @@ public abstract class CreativeInventoryScreenMixin extends ContainerScreen {
     protected void mouseClicked(int xPos, int yPos, int mouseButton,CallbackInfo ci) {
         super.mouseClicked(xPos, yPos, mouseButton);
         overlay.mouseClicked(xPos, yPos, mouseButton);
+    }
+
+    @Inject(method="keyPressed",at=@At("HEAD"))
+    public void keyPressed(char character, int code,CallbackInfo ci){
+        overlay.keyPressed(code);
     }
 }
