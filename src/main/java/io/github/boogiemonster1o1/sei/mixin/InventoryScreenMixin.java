@@ -1,7 +1,6 @@
 package io.github.boogiemonster1o1.sei.mixin;
 
 import io.github.boogiemonster1o1.sei.gui.ItemListOverlay;
-import io.github.boogiemonster1o1.sei.util.SEIInventory;
 import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
 import net.minecraft.client.gui.screen.ingame.ContainerScreen;
@@ -15,7 +14,7 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
 @Environment(EnvType.CLIENT)
 @Mixin(InventoryScreen.class)
-public abstract class InventoryScreenMixin extends ContainerScreen implements SEIInventory {
+public abstract class InventoryScreenMixin extends ContainerScreen {
 
     private ItemListOverlay overlay;
 
