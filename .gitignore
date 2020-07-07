@@ -1,5 +1,6 @@
 # Exclude everything
 /*
 
-# but the gitignore
+# but the gitignore and readme
 !.gitignore
+README.*
