@@ -4,10 +4,12 @@
   "package": "io.github.boogiemonster1o1.sei.mixin",
   "compatibilityLevel": "JAVA_8",
   "mixins": [
-    "BootstrapMixin"
   ],
   "client": [
+    "BootstrapMixin",
+    "CraftingTableScreenMixin",
     "CreativeInventoryScreenMixin",
+    "GenericContainerScreenMixin",
     "InventoryScreenMixin"
   ],
   "injectors": {

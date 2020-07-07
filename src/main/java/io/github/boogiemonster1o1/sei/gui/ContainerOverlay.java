@@ -1,39 +1,47 @@
 package io.github.boogiemonster1o1.sei.gui;
 
+import io.github.boogiemonster1o1.sei.SurelyEnoughItems;
+import net.minecraft.client.MinecraftClient;
+import net.minecraft.client.font.TextRenderer;
+import net.minecraft.client.gui.widget.ButtonWidget;
+import net.minecraft.client.render.GuiLighting;
+import net.minecraft.client.render.item.ItemRenderer;
+import net.minecraft.item.ItemStack;
+
+import java.awt.Color;
+import java.util.ArrayList;
+import java.util.List;
+
 public class ContainerOverlay {
     static final int iconPadding = 2;
     static final int iconSize = 16;
-    private static final RenderItem itemRender = new RenderItem();
+    private static final ItemRenderer ITEM_RENDERER = MinecraftClient.getInstance().getItemRenderer();
 
-    protected ArrayList<GuiItemIcon> items = new ArrayList<GuiItemIcon>();
+    protected List<ItemIcon> items = new ArrayList<>();
 
-    protected GuiButton nextButton;
-    protected GuiButton backButton;
+    protected ButtonWidget nextButton;
+    protected ButtonWidget backButton;
     protected static int pageNum = 1;
 
     protected int guiLeft;
-    protected int xSize;
+    protected int containerSize;
     protected int width;
     protected int height;
 
-    public GuiContainerOverlay(int guiLeft, int xSize, int width, int height) {
-        this.guiLeft = guiLeft;
-        this.xSize = xSize;
+    public ContainerOverlay(int x, int containerSize, int width, int height) {
+        this.guiLeft = x;
+        this.containerSize = containerSize;
         this.width = width;
         this.height = height;
     }
 
-    /**
-     * Adds the buttons (and other controls) to the screen in question.
-     */
-    @SuppressWarnings("unchecked")
-    public void initGui(List buttonList) {
+    public void init(List<ButtonWidget> buttonList) {
         final int buttonWidth = 50;
         final int buttonHeight = 20;
-        String next = StatCollector.translateToLocal("jei.button.next");
-        String back = StatCollector.translateToLocal("jei.button.back");
-        buttonList.add(nextButton = new GuiButton(-1, this.width - buttonWidth - 4, 0, buttonWidth, buttonHeight, next));
-        buttonList.add(backButton = new GuiButton(-2, this.guiLeft + this.xSize + 4, 0, buttonWidth, buttonHeight, back));
+        String next = ">";
+        String back = "<";
+        buttonList.add(nextButton = new ButtonWidget(-1, this.width - buttonWidth - 4, 0, buttonWidth, buttonHeight, next));
+        buttonList.add(backButton = new ButtonWidget(-2, this.guiLeft + this.containerSize + 4, 0, buttonWidth, buttonHeight, back));
 
         int pageCount = getPageCount();
         if (pageNum > pageCount)
@@ -45,19 +53,19 @@ public class ContainerOverlay {
     private void updatePage() {
         items.clear();
 
-        final int xStart = guiLeft + xSize + 4;
-        final int yStart = backButton.height + 4;
+        final int xStart = guiLeft + containerSize + 4;
+        final int yStart = 20 + 4;
 
         int x = xStart;
         int y = yStart;
         int maxX = 0;
 
-        for (int i = (pageNum - 1) * getCountPerPage(); i < JustEnoughItems.itemRegistry.itemList.size() && y + iconSize <= height; i++) {
+        for (int i = (pageNum - 1) * getCountPerPage(); i < SurelyEnoughItems.ITEM_STACKS.itemList.size() && y + iconSize <= height; i++) {
             if (x > maxX)
                 maxX = x;
 
-            ItemStack stack = JustEnoughItems.itemRegistry.itemList.get(i);
-            items.add(new GuiItemIcon(stack, x, y));
+            ItemStack stack = SurelyEnoughItems.ITEM_STACKS.itemList.get(i);
+            items.add(new ItemIcon(stack, x, y));
 
             x += iconSize + iconPadding;
             if (x + iconSize > width) {
@@ -66,10 +74,10 @@ public class ContainerOverlay {
             }
         }
 
-        nextButton.xPosition = maxX + iconSize - nextButton.width;
+        nextButton.x = maxX + iconSize - nextButton.getWidth();
     }
 
-    public void actionPerformed(GuiButton button) {
+    public void buttonPressed(ButtonWidget button) {
         if (button.id == -1) {
             if (pageNum == getPageCount())
                 setPageNum(1);
@@ -84,7 +92,7 @@ public class ContainerOverlay {
     }
 
     public void mouseClicked(int xPos, int yPos, int mouseButton) {
-        for (GuiItemIcon itemIcon : items) {
+        for (ItemIcon itemIcon : items) {
             if (itemIcon.isMouseOver(xPos, yPos)) {
                 itemIcon.mouseClicked(xPos, yPos, mouseButton);
                 return;
@@ -92,30 +100,30 @@ public class ContainerOverlay {
         }
     }
 
-    public void drawScreen(TextureManager textureManager, FontRenderer fontRendererObj) {
-        RenderHelper.enableGUIStandardItemLighting();
+    public void render(TextRenderer textRenderer) {
+        GuiLighting.method_2214();
 
-        for (GuiItemIcon itemIcon : items)
-            itemIcon.draw(itemRender, fontRendererObj, textureManager);
+        for (ItemIcon itemIcon : items)
+            itemIcon.draw(ITEM_RENDERER, textRenderer);
 
-        RenderHelper.disableStandardItemLighting();
+        GuiLighting.method_2210();
 
-        drawPageNumbers(fontRendererObj);
+        drawPageNumbers(textRenderer);
     }
 
-    private void drawPageNumbers(FontRenderer fontRendererObj) {
+    private void drawPageNumbers(TextRenderer textRenderer) {
         String pageDisplay = getPageNum() + " / " + getPageCount();
-        int pageDisplayWidth = fontRendererObj.getStringWidth(pageDisplay);
+        int pageDisplayWidth = textRenderer.getStringWidth(pageDisplay);
 
-        int pageDisplayX = ((backButton.xPosition + backButton.width) + nextButton.xPosition) / 2;
-        int pageDisplayY = backButton.yPosition + 6;
+        int pageDisplayX = ((backButton.x + backButton.getWidth()) + nextButton.x) / 2;
+        int pageDisplayY = backButton.y + 6;
 
-        fontRendererObj.drawString(pageDisplay, pageDisplayX - (pageDisplayWidth / 2), pageDisplayY, Color.white.getRGB());
+        textRenderer.draw(pageDisplay, pageDisplayX - (pageDisplayWidth / 2), pageDisplayY, Color.white.getRGB());
     }
 
     private int getCountPerPage() {
-        int xArea = width - (guiLeft + xSize + 4);
-        int yArea = height - (backButton.height + 4);
+        int xArea = width - (guiLeft + containerSize + 4);
+        int yArea = height - (20 + 4);
 
         int xCount = xArea / (iconSize + iconPadding);
         int yCount = yArea / (iconSize + iconPadding);
@@ -124,7 +132,7 @@ public class ContainerOverlay {
     }
 
     private int getPageCount() {
-        int count = JustEnoughItems.itemRegistry.itemList.size();
+        int count = SurelyEnoughItems.ITEM_STACKS.itemList.size();
         return (int) Math.ceil((double) count / (double) getCountPerPage());
     }
 
@@ -133,9 +141,9 @@ public class ContainerOverlay {
     }
 
     protected void setPageNum(int pageNum) {
-        if (GuiContainerOverlay.pageNum == pageNum)
+        if (ContainerOverlay.pageNum == pageNum)
             return;
-        GuiContainerOverlay.pageNum = pageNum;
+        ContainerOverlay.pageNum = pageNum;
         updatePage();
 
     }
