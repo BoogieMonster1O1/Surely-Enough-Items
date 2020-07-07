@@ -152,15 +152,20 @@ public class ItemListOverlay {
     public void keyPressed(int keyCode){
         try{
             if (keyCode == Keyboard.KEY_LEFT) {
-                if (pageNum == 1)
+                if (pageNum == 1) {
                     this.setPageNum(this.getPageCount());
-                else
+                }
+                else {
                     this.setPageNum(pageNum - 1);
-            } else if (keyCode == Keyboard.KEY_RIGHT) {
-                if (pageNum == this.getPageCount())
+                }
+            }
+            if (keyCode == Keyboard.KEY_RIGHT) {
+                if (pageNum == this.getPageCount()) {
                     this.setPageNum(1);
-                else
+                }
+                else {
                     this.setPageNum(pageNum + 1);
+                }
             }
         } catch (Throwable e) {
             e.printStackTrace();
