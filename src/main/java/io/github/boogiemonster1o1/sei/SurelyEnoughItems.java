@@ -11,6 +11,8 @@ public class SurelyEnoughItems implements ModInitializer {
 
     @Override
     public void onInitialize() {
+        SurelyEnoughItems.ITEM_STACKS = new ItemStacks();
+
         LOGGER.info("[{}] Initializing","SurelyEnoughItems");
     }
 }
