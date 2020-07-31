@@ -4,6 +4,7 @@
   "package": "io.github.boogiemonster1o1.sei.mixin",
   "compatibilityLevel": "JAVA_8",
   "mixins": [
+    "ItemStackMixin"
   ],
   "client": [
     "BrewingStandScreenMixin",
