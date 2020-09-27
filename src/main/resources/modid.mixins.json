@@ -9,5 +9,10 @@
   ],
   "injectors": {
     "defaultRequire": 1
-  }
+  },
+  "mixins": [
+    "ButtonWidgetAccessor",
+    "ContainerScreenAccessor",
+    "ScreenAccessor"
+  ]
 }

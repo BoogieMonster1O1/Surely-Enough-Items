@@ -88,6 +88,10 @@ public class ItemStacks {
         return this.itemList.stream().map(ItemStack::copy).collect(Collectors.toList());
     }
 
+    public List<ItemStack> getPlainList() {
+        return this.itemList;
+    }
+
     public Set<String> getItemNameSet() {
         try {
             //noinspection unchecked

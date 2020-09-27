@@ -19,7 +19,7 @@ public final class ContainerScreenEvents {
         }
     });
 
-    public static final Event<TetraConsumer<ContainerScreen, Integer, Integer, Float>> RENDER = EventFactory.createArrayBacked(TetraConsumer.class, (listeners) -> (screen, x, y, delta) -> {
+    public static final Event<TetraConsumer<ContainerScreen, Integer, Integer, Float>> POST_RENDER = EventFactory.createArrayBacked(TetraConsumer.class, (listeners) -> (screen, x, y, delta) -> {
         for (TetraConsumer<ContainerScreen, Integer, Integer, Float> consumer : listeners) {
             consumer.accept(screen, x, y, delta);
         }
