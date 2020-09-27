@@ -22,4 +22,10 @@ public final class ContainerEvents {
             consumer.accept(screen, x, y, delta);
         }
     });
+
+    public static final Event<QuadConsumer<ContainerScreen, Integer, Integer, Float>> PRE_RENDER = EventFactory.createArrayBacked(QuadConsumer.class, (listeners) -> (screen, x, y, delta) -> {
+        for (QuadConsumer<ContainerScreen, Integer, Integer, Float> consumer : listeners) {
+            consumer.accept(screen, x, y, delta);
+        }
+    });
 }

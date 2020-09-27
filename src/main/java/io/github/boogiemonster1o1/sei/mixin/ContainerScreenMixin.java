@@ -24,6 +24,11 @@ public class ContainerScreenMixin {
         ContainerEvents.RENDER.invoker().accept(this.getThis(), mouseX, mouseY, delta);
     }
 
+    @Inject(method = "render", at = @At("HEAD"))
+    public void interceptRenderPre(int mouseX, int mouseY, float delta, CallbackInfo ci) {
+        ContainerEvents.PRE_RENDER.invoker().accept(this.getThis(), mouseX, mouseY, delta);
+    }
+
     private ContainerScreen getThis() {
         return (ContainerScreen)(Object) this;
     }

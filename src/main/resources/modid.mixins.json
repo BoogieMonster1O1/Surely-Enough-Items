@@ -4,7 +4,8 @@
   "package": "io.github.boogiemonster1o1.sei.mixin",
   "compatibilityLevel": "JAVA_8",
   "client": [
-    "ContainerScreenMixin"
+    "ContainerScreenMixin",
+    "ScreenMixin"
   ],
   "injectors": {
     "defaultRequire": 1
