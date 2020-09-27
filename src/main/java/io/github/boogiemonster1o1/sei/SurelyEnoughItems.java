@@ -42,6 +42,6 @@ public class SurelyEnoughItems implements ModInitializer {
     }
 
     private static boolean shouldRender(ContainerScreen gui) {
-        return (gui != null)/* && !(gui instanceof CreativeInventoryScreen)*/;
+        return (gui != null);
     }
 }
