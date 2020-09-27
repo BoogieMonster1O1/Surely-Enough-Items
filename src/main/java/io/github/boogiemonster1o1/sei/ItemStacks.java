@@ -28,7 +28,7 @@ public class ItemStacks {
             return;
 
         List<ItemStack> subItems = new ArrayList<>();
-        item.addToItemGroup(item, null, subItems);
+        item.appendItemStacks(item, null, subItems);
         this.addItemStacks(subItems);
 
         if (subItems.isEmpty()) {
@@ -48,7 +48,7 @@ public class ItemStacks {
 
         List<ItemStack> subItems = new ArrayList<>();
         if (item != null) {
-            block.appendStacks(item, null, subItems);
+            block.appendItemStacks(item, null, subItems);
             this.addItemStacks(subItems);
         }
 
