@@ -8,10 +8,11 @@ import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
+import java.util.stream.Collectors;
 
 public class ItemStacks {
-    public List<ItemStack> itemList = new ArrayList<>();
-    public Set<String> itemNameSet = new HashSet<>();
+    private final List<ItemStack> itemList = new ArrayList<>();
+    private final HashSet<String> itemNameSet = new HashSet<>();
 
     public ItemStacks() {
         for (Block block : Block.REGISTRY) {
@@ -28,7 +29,7 @@ public class ItemStacks {
             return;
 
         List<ItemStack> subItems = new ArrayList<>();
-        item.addToItemGroup(item, null, subItems);
+        item.appendItemStacks(item, null, subItems);
         this.addItemStacks(subItems);
 
         if (subItems.isEmpty()) {
@@ -48,7 +49,7 @@ public class ItemStacks {
 
         List<ItemStack> subItems = new ArrayList<>();
         if (item != null) {
-            block.appendStacks(item, null, subItems);
+            block.appendItemStacks(item, null, subItems);
             this.addItemStacks(subItems);
         }
 
@@ -57,7 +58,7 @@ public class ItemStacks {
             if (stack.getItem() == null) {
                 return;
             }
-            addItemStack(stack);
+            this.addItemStack(stack);
         }
     }
 
@@ -66,14 +67,14 @@ public class ItemStacks {
     }
 
     public void addItemStack(ItemStack stack) {
-        String itemKey = uniqueIdentifierForStack(stack);
+        String itemKey = this.uniqueIdentifierForStack(stack);
         if (stack.hasTag())
             itemKey += stack.getTag();
 
-        if (itemNameSet.contains(itemKey))
+        if (this.itemNameSet.contains(itemKey))
             return;
-        itemNameSet.add(itemKey);
-        itemList.add(stack);
+        this.itemNameSet.add(itemKey);
+        this.itemList.add(stack);
     }
 
     private String uniqueIdentifierForStack(ItemStack stack) {
@@ -81,5 +82,18 @@ public class ItemStacks {
         if (stack.hasTag())
             itemKey.append(":").append(stack.getTag().toString());
         return itemKey.toString();
+    }
+
+    public List<ItemStack> getItemList() {
+        return this.itemList.stream().map(ItemStack::copy).collect(Collectors.toList());
+    }
+
+    public Set<String> getItemNameSet() {
+        try {
+            //noinspection unchecked
+            return (Set<String>) this.itemNameSet.clone();
+        } catch (ClassCastException e) {
+            throw new AssertionError(e);
+        }
     }
 }

@@ -3,17 +3,7 @@
   "minVersion": "0.8",
   "package": "io.github.boogiemonster1o1.sei.mixin",
   "compatibilityLevel": "JAVA_8",
-  "mixins": [
-  ],
   "client": [
-    "BootstrapMixin",
-    "BrewingStandScreenMixin",
-    "CraftingTableScreenMixin",
-    "CreativeInventoryScreenMixin",
-    "EnchantingScreenMixin",
-    "FurnaceScreenMixin",
-    "GenericContainerScreenMixin",
-    "InventoryScreenMixin"
   ],
   "injectors": {
     "defaultRequire": 1
