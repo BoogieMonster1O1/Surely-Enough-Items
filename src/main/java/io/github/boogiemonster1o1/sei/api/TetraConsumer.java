@@ -6,9 +6,9 @@ import java.util.function.Consumer;
 
 /**
  * Represents an operation that accepts two input arguments and returns no
- * result.  This is the three-arity specialization of {@link Consumer},
+ * result.  This is the four-arity specialization of {@link Consumer},
  * {@link BiConsumer} or {@link TriConsumer}. Unlike most other functional
- * interfaces, {@code QuadConsumer} is expected to operate via side-effects.
+ * interfaces, {@code TetraConsumer} is expected to operate via side-effects.
  *
  * <p>This is a <a href="package-summary.html">functional interface</a>
  * whose functional method is {@link #accept(Object, Object, Object, Object)}.
@@ -21,9 +21,10 @@ import java.util.function.Consumer;
  * @see Consumer
  * @see BiConsumer
  * @see TriConsumer
+ * @see PentaConsumer
  */
 @FunctionalInterface
-public interface QuadConsumer<S, T, U, V> {
+public interface TetraConsumer<S, T, U, V> {
 
     /**
      * Performs this operation on the given arguments.
@@ -36,18 +37,18 @@ public interface QuadConsumer<S, T, U, V> {
     void accept(S s, T t, U u, V v);
 
     /**
-     * Returns a composed {@code QuadConsumer} that performs, in sequence, this
+     * Returns a composed {@code TetraConsumer} that performs, in sequence, this
      * operation followed by the {@code after} operation. If performing either
      * operation throws an exception, it is relayed to the caller of the
      * composed operation.  If performing this operation throws an exception,
      * the {@code after} operation will not be performed.
      *
      * @param after the operation to perform after this operation
-     * @return a composed {@code QuadConsumer} that performs in sequence this
+     * @return a composed {@code TetraConsumer} that performs in sequence this
      * operation followed by the {@code after} operation
      * @throws NullPointerException if {@code after} is null
      */
-    default QuadConsumer<S, T, U, V> andThen(QuadConsumer<? super S, ? super T, ? super U, ? super V> after) {
+    default TetraConsumer<S, T, U, V> andThen(TetraConsumer<? super S, ? super T, ? super U, ? super V> after) {
         Objects.requireNonNull(after);
 
         return (s, t, u, v) -> {

@@ -20,7 +20,8 @@ import java.util.function.Consumer;
  *
  * @see Consumer
  * @see BiConsumer
- * @see QuadConsumer
+ * @see TetraConsumer
+ * @see PentaConsumer
  */
 @FunctionalInterface
 public interface TriConsumer<T,U, V> {
