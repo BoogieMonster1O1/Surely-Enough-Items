@@ -7,9 +7,10 @@ import java.util.function.Consumer;
 
 /**
  * Represents an operation that accepts two input arguments and returns no
- * result.  This is the three-arity specialization of {@link Consumer} or
- * {@link BiConsumer}. Unlike most other functional interfaces,
- * {@code TriConsumer} is expected to operate via side-effects.
+ * result. This is the three-arity specialization of {@link Consumer},
+ * {@link BiConsumer}, {@link TetraConsumer} or {@link PentaConsumer}.
+ * Unlike most other functional interfaces, {@code TriConsumer} is
+ * expected to operate via side-effects.
  *
  * <p>This is a <a href="package-summary.html">functional interface</a>
  * whose functional method is {@link #accept(Object, Object, Object)}.

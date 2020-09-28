@@ -5,8 +5,8 @@ import java.util.function.BiConsumer;
 import java.util.function.Consumer;
 
 /**
- * Represents an operation that accepts two input arguments and returns no
- * result.  This is the five-arity specialization of {@link Consumer},
+ * Represents an operation that accepts five input arguments and returns no
+ * result. This is the five-arity specialization of {@link Consumer},
  * {@link BiConsumer}, {@link TriConsumer} or {@link TetraConsumer}.
  * Unlike most other functional interfaces,
  * {@code PentaConsumer} is expected to operate via side-effects.
