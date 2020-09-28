@@ -4,6 +4,7 @@ import io.github.boogiemonster1o1.sei.api.ContainerScreenEvents;
 import io.github.boogiemonster1o1.sei.gui.ContainerOverlay;
 import io.github.boogiemonster1o1.sei.mixin.ContainerScreenAccessor;
 import io.github.boogiemonster1o1.sei.mixin.ScreenAccessor;
+import net.minecraft.client.gui.screen.ingame.CreativeInventoryScreen;
 import org.apache.logging.log4j.Level;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -16,7 +17,7 @@ import net.fabricmc.api.ModInitializer;
 public class SurelyEnoughItems implements ModInitializer {
     private static final Logger LOGGER = LogManager.getLogger(SurelyEnoughItems.class);
     private static final ContainerOverlay OVERLAY = new ContainerOverlay();
-    public static ItemStacks ITEM_STACKS;
+    public static ItemStacks ITEM_STACKS = new ItemStacks();
 
     @Override
     public void onInitialize() {
