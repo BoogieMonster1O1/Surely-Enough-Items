@@ -19,7 +19,7 @@ import net.fabricmc.fabric.api.client.event.lifecycle.v1.ClientTickEvents;
 public class SurelyEnoughItems implements ModInitializer {
     private static final Logger LOGGER = LogManager.getLogger(SurelyEnoughItems.class);
     private static final ContainerOverlay OVERLAY = new ContainerOverlay();
-    public static ItemStacks ITEM_STACKS;
+    public static ItemStacks ITEM_STACKS = new ItemStacks();
 
     @Override
     public void onInitialize() {
