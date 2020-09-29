@@ -1,14 +1,10 @@
 package io.github.boogiemonster1o1.sei.gui;
 
 import io.github.boogiemonster1o1.sei.util.CommandHelper;
-import org.lwjgl.opengl.GL11;
-import com.mojang.blaze3d.platform.AdvancedOpenGlManager;
-import com.mojang.blaze3d.platform.GlStateManager;
 
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.gui.widget.ButtonWidget;
 import net.minecraft.client.network.ClientPlayerEntity;
-import net.minecraft.client.render.GuiLighting;
 import net.minecraft.client.render.item.ItemRenderer;
 import net.minecraft.item.ItemStack;
 
@@ -33,14 +29,18 @@ public class ItemButton extends ButtonWidget {
         return this.stack;
     }
 
-    public void actionPerformed() {
+    public void handleMouseClick(int mouseButton) {
         if (!this.active) {
             return;
         }
 
         ClientPlayerEntity player = MinecraftClient.getInstance().player;
         if (MinecraftClient.getInstance().getServer().getPlayerManager().isOperator(player.getGameProfile()) && player.inventory.method_7966() != -1) {
-            CommandHelper.giveFullStack(this.stack);
+            if (mouseButton == 0) {
+                CommandHelper.giveFullStack(this.stack);
+            } else if (mouseButton == 1) {
+                CommandHelper.giveOneFromStack(this.stack);
+            }
         }
         //TODO: recipes
     }
@@ -50,18 +50,7 @@ public class ItemButton extends ButtonWidget {
         if (!this.visible) {
             return;
         }
-
-        GlStateManager.color4f(1.0F, 1.0F, 1.0F, 1.0F);
-        GlStateManager.enableBlend();
-        AdvancedOpenGlManager.blendFuncSeperate(GL11.GL_SRC_ALPHA, GL11.GL_ONE_MINUS_SRC_ALPHA, GL11.GL_ONE, GL11.GL_ZERO);
-        GlStateManager.enableRescaleNormal();
-        GuiLighting.enable();
-
-        ITEM_RENDERER.renderInGuiWithOverrides( this.stack, this.x + PADDING, this.y + PADDING);
-
-        GuiLighting.disable();
-        GlStateManager.disableRescaleNormal();
-        GlStateManager.disableBlend();
+        ITEM_RENDERER.renderInGuiWithOverrides(this.stack, this.x + PADDING, this.y + PADDING);
     }
 
     public int getHeight() {

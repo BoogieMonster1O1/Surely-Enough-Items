@@ -16,7 +16,7 @@ import net.fabricmc.api.Environment;
 public class ContainerScreenMixin {
     @Inject(method = "init", at = @At("TAIL"))
     public void interceptInit(CallbackInfo ci) {
-        ContainerScreenEvents.INIT.invoker().accept( this.getThis());
+        ContainerScreenEvents.INIT.invoker().accept(this.getThis());
     }
 
     @Inject(method = "render", at = @At("TAIL"))
@@ -30,6 +30,6 @@ public class ContainerScreenMixin {
     }
 
     private ContainerScreen getThis() {
-        return (ContainerScreen)(Object) this;
+        return (ContainerScreen) (Object) this;
     }
 }

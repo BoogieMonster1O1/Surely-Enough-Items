@@ -18,14 +18,13 @@ import java.util.function.Consumer;
  * @param <T> the type of the first argument to the operation
  * @param <U> the type of the second argument to the operation
  * @param <V> the type of the third argument to the operation
- *
  * @see Consumer
  * @see BiConsumer
  * @see TetraConsumer
  * @see PentaConsumer
  */
 @FunctionalInterface
-public interface TriConsumer<T,U, V> {
+public interface TriConsumer<T, U, V> {
 
     /**
      * Performs this operation on the given arguments.
